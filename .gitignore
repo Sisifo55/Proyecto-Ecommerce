@@ -138,9 +138,32 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
-Этот .gitignore файл настроен для исключения всех основных временных файлов и каталогов, которые создаются в процессе разработки проекта на C# с использованием Visual Studio и .NET.
+# Dependency directories
+node_modules/
+npm-debug.log
 
+# Optional npm cache directory
+.npm
 
+# Local development env files
+.env
+
+# IDEs and editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+
+# Compiled output
+/dist/
+/build/
+*.min.js
+*.min.css
+
+# Logs
+*.log
+
+database.js
 
 
 
