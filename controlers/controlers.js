@@ -1,4 +1,4 @@
-const sequelize = require('../controlers/database'); // Измененный путь
+const sequelize = require('../controlers/database'); se
 
 async function testConnection() {
   try {
