@@ -6,6 +6,9 @@ const Category = sequelize.define('Category', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+}, {
+  timestamps: true, // добавляем timestamps поля createdAt и updatedAt
 });
 
 module.exports = Category;
+
