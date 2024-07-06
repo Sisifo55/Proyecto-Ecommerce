@@ -1,6 +1,7 @@
 const express = require('express');
 const sequelize = require('./config/database'); // Предположим, что здесь у вас правильный путь к конфигурации базы данных
 const userRoutes = require('./routs/userRoutes');
+const categoryRoutes = require('./routs/categoryRoutes');
 const productRoutes = require('./routs/productRoutes'); // Исправил путь к файлу маршрутов
 const { authenticate } = require('./middleware/authenticateToken');
 const authRoutes = require('./routs/authRoutes');
@@ -22,16 +23,10 @@ sequelize.authenticate()
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes); // Исправлен маршрут до productRoutes
 app.use('/auth', authRoutes); // Маршрут для аутентификации уже использован выше
-
+app.use('/api/categories', categoryRoutes);
 // Приветственный маршрут
 app.get('/', (req, res) => {
   res.send('Welcome');
-});
-
-// Обработчик ошибок
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
 });
 
 // Запуск сервера

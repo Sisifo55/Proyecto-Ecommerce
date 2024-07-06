@@ -1,14 +1,17 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-
+const Product = require('./product');
 const Category = sequelize.define('Category', {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
 }, {
-  timestamps: true, // добавляем timestamps поля createdAt и updatedAt
+  timestamps: true,
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
 });
 
-module.exports = Category;
+Category.hasMany(Product, { foreignKey: 'category_id' }); // Define association
 
+module.exports = Category;

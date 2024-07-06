@@ -1,77 +1,78 @@
 const Category = require('../models/category');
 const Product = require('../models/product');
 
-exports.createCategory = async (req, res) => {
-  const { name } = req.body;
-  if (!name) {
-    return res.status(400).json({ message: 'Name is required' });
-  }
+// Метод для создания новой категории
+const createCategory = async (req, res) => {
   try {
-    const newCategory = await Category.create({ name });
-    res.status(201).json(newCategory);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const { name } = req.body;
+    const category = await Category.create({ name });
+    res.status(201).json(category);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
 
-exports.updateCategory = async (req, res) => {
-  const { id } = req.params;
-  const { name } = req.body;
+// Метод для получения всех категорий
+const getAllCategories = async (req, res) => {
   try {
-    const category = await Category.findByPk(id);
-    if (!category) {
-      return res.status(404).json({ message: 'Category not found' });
-    }
-    category.name = name || category.name;
-    await category.save();
-    res.status(200).json(category);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const categories = await Category.findAll();
+    res.status(200).json(categories);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
-exports.deleteCategory = async (req, res) => {
+// Метод для получения категории по ID
+const getCategoryById = async (req, res) => {
   const { id } = req.params;
   try {
     const category = await Category.findByPk(id);
     if (!category) {
-      return res.status(404).json({ message: 'Category not found' });
-    }
-    await category.destroy();
-    res.status(200).json({ message: 'Category deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-exports.getAllCategories = async (req, res) => {
-  try {
-    const categories = await Category.findAll({ include: Product });
-    res.status(200).json(categories);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-exports.getCategoryById = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const category = await Category.findByPk(id, { include: Product });
-    if (!category) {
-      return res.status(404).json({ message: 'Category not found' });
+      return res.status(404).json({ error: 'Category not found' });
     }
     res.status(200).json(category);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
-exports.searchCategoryByName = async (req, res) => {
-  const { name } = req.query;
+// Метод для обновления категории по ID
+const updateCategory = async (req, res) => {
+  const { id } = req.params;
   try {
-    const categories = await Category.findAll({ where: { name: { [Op.like]: `%${name}%` } } });
-    res.status(200).json(categories);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const [updated] = await Category.update(req.body, {
+      where: { id },
+    });
+    if (updated) {
+      const updatedCategory = await Category.findByPk(id);
+      return res.status(200).json(updatedCategory);
+    }
+    throw new Error('Category not found');
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
+};
+
+// Метод для удаления категории по ID
+const deleteCategory = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deleted = await Category.destroy({
+      where: { id },
+    });
+    if (deleted) {
+      return res.status(204).send();
+    }
+    throw new Error('Category not found');
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  createCategory,
+  getAllCategories,
+  getCategoryById,
+  updateCategory,
+  deleteCategory,
 };
