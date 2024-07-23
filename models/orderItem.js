@@ -1,30 +1,18 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const Product = require('./product');
-const Order = require('./order');
+const Order = require('./order'); // Import order model
+const Product = require('./product'); // Import product model
 
 const OrderItem = sequelize.define('OrderItem', {
-  orderId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Order,
-      key: 'id'
-    }
-  },
-  productId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Product,
-      key: 'id'
-    }
-  },
   quantity: {
     type: DataTypes.INTEGER,
-    allowNull: false
-  }
+    allowNull: false,
+  },
+}, {
+  timestamps: true, // Automatically include createdAt and updatedAt
 });
 
-Order.belongsToMany(Product, { through: OrderItem });
-Product.belongsToMany(Order, { through: OrderItem });
+OrderItem.belongsTo(Order); // Define relationship with Order (One-to-Many)
+OrderItem.belongsTo(Product); // Define relationship with Product (One-to-Many)
 
 module.exports = OrderItem;

@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const User = require('../models/user'); // Путь к модели User
+const User = require('../models/user');
 
-// Регистрация пользователя
+// User registration function
 exports.register = async (req, res) => {
   const { username, password, role } = req.body;
 
@@ -11,15 +11,13 @@ exports.register = async (req, res) => {
   }
 
   try {
-    // Генерируем соль и хэшируем пароль
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Создаем нового пользователя
     const newUser = await User.create({
       username,
       password: hashedPassword,
-      role // не забываем про роль, если она необходима
+      role 
     });
 
     res.status(201).json({ message: 'User registered', user: newUser });
@@ -28,7 +26,7 @@ exports.register = async (req, res) => {
   }
 };
 
-// Авторизация пользователя
+// User login function
 exports.login = async (req, res) => {
   const { username, password } = req.body;
 
@@ -37,15 +35,12 @@ exports.login = async (req, res) => {
   }
 
   try {
-    // Находим пользователя по имени
     const user = await User.findOne({ where: { username } });
 
-    // Проверяем существование пользователя и соответствие пароля
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Генерируем JWT токен
     const token = jwt.sign(
       { userId: user.id, role: user.role },
       process.env.JWT_SECRET,
@@ -57,4 +52,3 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: 'Error logging in', error: err.message });
   }
 };
-

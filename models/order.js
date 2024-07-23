@@ -1,19 +1,26 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const User = require('./user');
-const Product = require('./product'); 
+const User = require('./user'); // Import user model
 
 const Order = sequelize.define('Order', {
-  total: {
-    type: DataTypes.FLOAT,
-    allowNull: false
+  id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+  },
+  userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+  },
+  status: {
+      type: DataTypes.ENUM('pending', 'completed', 'cancelled'),
+      defaultValue: 'pending'
   }
 }, {
-  timestamps: true
+  tableName: 'orders',
+  timestamps: true, 
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 });
 
-Order.belongsTo(User);
-Order.belongsToMany(Product, { through: 'OrderProducts' });
-Product.belongsToMany(Order, { through: 'OrderProducts' });
-
-module.exports = Order;
+module.exports = { Order };
