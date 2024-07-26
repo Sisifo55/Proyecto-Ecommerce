@@ -1,7 +1,8 @@
 const { Sequelize } = require('sequelize');
 const sequelize = new Sequelize('goshop', 'root', 'vadim20***14', {
   host: 'localhost',
-  dialect: 'mysql'
+  dialect: 'mysql',
+  logging: console.log,
 });
-//Exporting the Sequelize Instance:
+
 module.exports = sequelize;

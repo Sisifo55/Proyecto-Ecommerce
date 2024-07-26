@@ -1,10 +1,14 @@
-name: NodeJS with Webpack
+name: Node.js CI
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches:
+      - main
+      - develop
   pull_request:
-    branches: [ "main", "develop" ]
+    branches:
+      - main
+      - develop
 
 jobs:
   build:
@@ -16,7 +20,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
@@ -24,13 +28,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-      run: |
-        npm install
-        npm install -D webpack  # Установка webpack
-
-    - name: Build
-      run: npx webpack
+      run: npm install
 
     - name: Run tests
       run: npm test -- --passWithNoTests
 
+    - name: Build project
+      run: npm run build
