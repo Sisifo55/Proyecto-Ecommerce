@@ -27,7 +27,7 @@
     "jest": "^29.7.0",
     "nodemon": "^3.1.4",
     "sequelize-cli": "^6.6.2",
-    "webpack": "^5.74.0",
+    "webpack": "^5.88.0",
     "webpack-cli": "^5.1.4"
   },
   "jest": {
@@ -37,3 +37,4 @@
     ]
   }
 }
+
