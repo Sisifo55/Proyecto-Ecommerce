@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const orderController = require('../controlers/orderController');
+const orderController = require('../controlers/orderController'); 
 const { authenticate } = require('../middleware/authenticateToken');
 
 // Route for creating a new order
